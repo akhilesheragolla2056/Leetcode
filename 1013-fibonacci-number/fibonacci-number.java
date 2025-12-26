@@ -1,7 +1,15 @@
 class Solution {
     public int fib(int n) {
-        double sqrt5 = Math.sqrt(5);
-        double fibN = Math.pow((1 + sqrt5) / 2, n) - Math.pow((1 - sqrt5) / 2, n);
-        return (int) Math.round(fibN / sqrt5);
+        if(n==0) return 0;
+        if(n==1) return 1;
+        int firstNo=0;
+        int secondNo=1;
+        int nextNo=0;
+        for(int i=2;i<=n;i++){
+            nextNo=firstNo+secondNo;
+            firstNo=secondNo;
+            secondNo=nextNo;
+        }
+        return nextNo;
     }
 }
