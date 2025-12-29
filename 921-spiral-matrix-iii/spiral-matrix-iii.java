@@ -1,47 +1,66 @@
-import java.util.*;
-
 class Solution {
     public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
-        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-        int numSteps = 1;
-        int totalCells = rows * cols;
-        List<int[]> result = new ArrayList<>();
-        int r = rStart, c = cStart;
-        int d = 0;
+        int ans[][] = new int[rows*cols][2];
+        ans[0][0] = rStart;
+        ans[0][1] = cStart;
+        boolean[][] vis = new boolean[rows][cols];
+        helper(rStart, cStart, rows, cols, ans, vis, 1, 1);
+        return ans;
+    }
 
-        while (result.size() < totalCells) {
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < numSteps; j++) {
-                    if (0 <= r && r < rows && 0 <= c && c < cols) {
-                        result.add(new int[]{r, c});
-                    }
-                    if (result.size() == totalCells) {
-                        return convertListToArray(result);
-                    }
-                    r += directions[d][0];
-                    c += directions[d][1];
-                }
-                d = (d + 1) % 4;
+    void helper(int curr_row, int curr_col, int rows, int cols, int[][] ans, boolean[][] vis, int count, int ind){        
+        int row = curr_row;
+        int col = curr_col;
+        boolean flag = false;
+        for(int i = 1; i <= count; i++){
+            row = row;
+            col = col + 1;
+            if(col < cols && col >= 0 && row >= 0 && row < rows){
+                flag = true;
+                ans[ind][0] = row;
+                ans[ind][1] = col;
+                vis[row][col] = true;
+                ind++;
+            } 
+        }
+
+        for(int i = 1; i <= count; i++){
+            row = row + 1;
+            col = col;
+            if(row < rows && row >= 0 && col >= 0 && col < cols){
+                flag = true;
+                ans[ind][0] = row;
+                ans[ind][1] = col;
+                vis[row][col] = true;
+                ind++;
             }
-            numSteps++;
+        }
+        count++;
+
+        for(int i = 1; i <= count; i++){
+            row = row;
+            col = col - 1;
+            if(col >= 0 && col < cols &&  row >= 0 && row < rows){
+                flag = true;
+                ans[ind][0] = row;
+                ans[ind][1] = col;
+                vis[row][col] = true;
+                ind++;
+            }
         }
 
-        return convertListToArray(result);
-    }
-
-    private int[][] convertListToArray(List<int[]> list) {
-        int[][] array = new int[list.size()][2];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
+        for(int i = 1; i <= count; i++){
+            row = row - 1;
+            col = col;
+            if(row >= 0 && row < rows && col >= 0 && col < cols){
+                flag = true;
+                ans[ind][0] = row;
+                ans[ind][1] = col;
+                vis[row][col] = true;
+                ind++;
+            }
         }
-        return array;
-    }
 
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        int[][] result = solution.spiralMatrixIII(5, 6, 1, 4);
-        for (int[] coords : result) {
-            System.out.println(Arrays.toString(coords));
-        }
+        if(flag) helper(row, col, rows, cols, ans, vis, count + 1, ind);
     }
 }
